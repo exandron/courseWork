@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AcademicUnit.h" />
     <ClInclude Include="Exam.h" />
     <ClInclude Include="MyDate.h" />
     <ClInclude Include="Student.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AcademicUnit.cpp" />
     <ClCompile Include="Exam.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyDate.cpp" />

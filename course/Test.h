@@ -1,15 +1,13 @@
 #pragma once
 #include <string>
 #include "MyDate.h"
+#include "AcademicUnit.h"
 
 using namespace std;
 
-class Test {
+class Test : public AcademicUnit {
 private:
-    string name;
     bool isPassed;
-    MyDate date;
-
 public:
     Test();
     Test(string name, bool isPassed, MyDate date);
