@@ -1,7 +1,7 @@
 #include "AcademicUnit.h"
 #include<string>
 
-void AcademicUnit::setName(string name) {
+/*void AcademicUnit::setName(string name) {
     this->name = name;
 }
 
@@ -19,7 +19,7 @@ bool AcademicUnit::isHappened() {
 
 void AcademicUnit::setDate(MyDate date) {
     this->date = date;
-}
+}*/
 
 
 AcademicUnit::AcademicUnit() {

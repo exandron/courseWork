@@ -24,3 +24,22 @@ bool Test::getIsPassed() {
     return isPassed;
 }
 
+void Test::setName(string name) {
+    this->name = name;
+}
+
+string Test::getName() {
+    return name;
+}
+
+MyDate Test::getDate() {
+    return date;
+}
+
+bool Test::isHappened() {
+    return !(date.getDay() == 1 && date.getMonth() == 1 && date.getYear() == 1);
+}
+
+void Test::setDate(MyDate date) {
+    this->date = date;
+}
