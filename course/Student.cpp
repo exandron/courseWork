@@ -102,50 +102,6 @@ Student::Student(const Student& student) {
     }
 }
 
-double Student::getScholarship(double scholarship) {
-    if (formOfEducation == 0) {
-        return 0;
-    }
-    else {
-        for (int i = 0; i < 5; i++) {
-            if (tests[i].isHappened() && !tests[i].getGrade()) {
-                return 0;
-            }
-            if (!tests[i].isHappened()) {
-                return  -1;
-            }
-        }
-        for (int i = 0; i < 4; i++) {
-            if (exams[i].getGrade() < 4 && exams[i].isHappened()) {
-                return 0;
-            }
-            if (!exams[i].isHappened()) {
-                return -1;
-            }
-        }
-        bool excellent = true;
-        double middleGrade = 0;
-        for (int i = 0; i < 4; i++) {
-            middleGrade += exams[i].getGrade();
-            if (exams[i].getGrade() < 9) {
-                excellent = false;
-            }
-        }
-        if (excellent && socialLife == 1) {
-            return scholarship * 1.5;
-        }
-        else if (excellent && socialLife == 0) {
-            return scholarship * 1.25;
-        }
-        else if (middleGrade / 4 > 5) {
-            return scholarship;
-        }
-        else {
-            return 0;
-        }
-    }
-}
-
 void Student::printFullName() {
     cout << surname << " " << name << " " << fathername;
 }
