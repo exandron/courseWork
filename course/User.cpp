@@ -11,13 +11,10 @@ User::User() {
     isAdmin = false;
 }
 
-User::User(string login, string password, bool isAdmin, User* users) {
+User::User(string login, string password, bool isAdmin) {
     this->login = login;
     this->password = password;
     this->isAdmin = isAdmin;
-    for (int i = 0; i < this->users.size(); i++) {
-        this->users[i] = users[i];
-    }
 }
 
 string User::getLogin() {
@@ -318,7 +315,7 @@ void User::deleteUser(string filepath) {
         if (choice > this->users.size() || choice < 1) {
             cout << "Нет такого элемента! Повторите попытку: ";
         }
-        else if (getAdminsAmount() == 1 && users[choice - 1].getIsAdmin()) {
+        else if (getAdminsAmount() == 1 && users[choice - 1]->getIsAdmin()) {
             cout << "Вы не можете удалить единственного администратора! Повторите попытку: ";
         }
         else {
@@ -327,7 +324,7 @@ void User::deleteUser(string filepath) {
         }
     }
     bool exitFlag = false;
-    if (users[choice - 1].getLogin() == login) {
+    if (users[choice - 1]->getLogin() == login) {
         exitFlag = true;
     }
     users.erase(users.begin() + choice - 1);
@@ -387,12 +384,12 @@ void User::editUser(string filepath) {
                 return;
             }
         }
-        users[choice - 1].setLogin(login);
+        users[choice - 1]->setLogin(login);
         break;
     case 2:
         cout << "Введите пароль: ";
         password = inputPassword();
-        users[choice - 1].setPassword(password);
+        users[choice - 1]->setPassword(password);
         break;
     case 3:
         cout << "Желаете ли сделать данного пользователя администратором?\n1 - Да\n0 - Нет\n";
@@ -407,7 +404,7 @@ void User::editUser(string filepath) {
                 cout << "Введено неправильное значение! Повторите попытку: ";
             }
         }
-        users[choice - 1].setIsAdmin(role);
+        users[choice - 1]->setIsAdmin(role);
         break;
     default:
         break;
@@ -424,7 +421,7 @@ void User::getUsersFromFile(string filename) {
         User user;
         for (int i = 0; i < size; i++) {
             file >> user;
-            users.push_back(user);
+            users.push_back(make_unique<User>(user.getLogin(), user.getPassword(), user.getIsAdmin()));
         }
     }
     else {
@@ -438,8 +435,8 @@ void User::printUsers() {
     cout << "| № |        Логин        |        Роль        |" << endl;
     cout << "+---+---------------------+--------------------+" << endl;
     for (int i = 0; i < this->users.size(); i++) {
-        string role = users[i].getIsAdmin() ? "Администратор" : "Пользователь";
-        cout << left << "| " << setw(2) << i + 1 << "|  " << setw(19) << users[i].getLogin() << "|  " << setw(18) << role << "|" << endl;
+        string role = users[i]->getIsAdmin() ? "Администратор" : "Пользователь";
+        cout << left << "| " << setw(2) << i + 1 << "|  " << setw(19) << users[i]->getLogin() << "|  " << setw(18) << role << "|" << endl;
     }
     cout << "+---+---------------------+--------------------+" << endl;
 }
@@ -474,7 +471,7 @@ void User::printUsersIntoFile(string filename) {
     file1.open(filename);
     if (file1.is_open()) {
         for (int i = 0; i < this->users.size(); i++) {
-            file1 << users[i].getLogin() << ";" << users[i].getPassword() << ";" << users[i].getIsAdmin() << ";";
+            file1 << users[i]->getLogin() << ";" << users[i]->getPassword() << ";" << users[i]->getIsAdmin() << ";";
             if (i != this->users.size() - 1) {
                 file1 << endl;
             }
@@ -489,14 +486,14 @@ void User::printUsersIntoFile(string filename) {
 int User::getAdminsAmount() {
     int result = 0;
     for (int i = 0; i < this->users.size(); i++) {
-        if (users[i].getIsAdmin()) {
+        if (users[i]->getIsAdmin()) {
             result++;
         }
     }
     return result;
 }
 
-vector<User> User::getUsers() {
+vector<shared_ptr<User>> User::getUsers() {
     return users;
 }
 
