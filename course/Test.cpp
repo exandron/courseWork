@@ -2,26 +2,26 @@
 
 Test::Test() {
     name = "";
-    isPassed = false;
+    grade = false;
     date = MyDate(1, 1, 1);
 }
 
 Test::Test(string name, bool isPassed, MyDate date) {
     this->name = name;
-    this->isPassed = isPassed;
+    this->grade = isPassed;
     this->date = date;
 }
 
 Test::~Test() {}
 
 
-void Test::setIsPassed(bool isPassed) {
-    this->isPassed = isPassed;
+void Test::setGrade(bool isPassed) {
+    this->grade = isPassed;
 }
 
 
-bool Test::getIsPassed() {
-    return isPassed;
+bool Test::getGrade() {
+    return grade;
 }
 
 void Test::setName(string name) {

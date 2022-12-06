@@ -108,7 +108,7 @@ double Student::getScholarship(double scholarship) {
     }
     else {
         for (int i = 0; i < 5; i++) {
-            if (tests[i].isHappened() && !tests[i].getIsPassed()) {
+            if (tests[i].isHappened() && !tests[i].getGrade()) {
                 return 0;
             }
             if (!tests[i].isHappened()) {
@@ -202,7 +202,7 @@ istream& operator>>(istream& in, Student& student) {
             if (i < 15) {
                 Test tmpTest;
                 tmpTest.setName(tokens[i]);
-                tmpTest.setIsPassed(stoi(tokens[i + 1]));
+                tmpTest.setGrade(stoi(tokens[i + 1]));
                 pos = 0;
                 delimiter = "/";
                 MyDate newDate;
@@ -262,7 +262,7 @@ ostream& operator<<(ostream& out, Student& student) {
     out << student.getGroup() << ";" << student.getSurname() << ";" << student.getName() << ";" << student.getFathername() << ";" << student.getFormOfEducation() << ";" << student.getSocialLife() << ";";
     for (int i = 0; i < 9; i++) {
         if (i < 5) {
-            out << student.getTests()[i].getName() << ";" << student.getTests()[i].getIsPassed() << ";" << student.getTests()[i].getDate().getDay() << "/" << student.getTests()[i].getDate().getMonth() << "/" << student.getTests()[i].getDate().getYear() << ";";
+            out << student.getTests()[i].getName() << ";" << student.getTests()[i].getGrade() << ";" << student.getTests()[i].getDate().getDay() << "/" << student.getTests()[i].getDate().getMonth() << "/" << student.getTests()[i].getDate().getYear() << ";";
         }
         else {
             out << student.getExams()[i - 5].getName() << ";" << student.getExams()[i - 5].getGrade() << ";" << student.getExams()[i - 5].getDate().getDay() << "/" << student.getExams()[i - 5].getDate().getMonth() << "/" << student.getExams()[i - 5].getDate().getYear() << ";";

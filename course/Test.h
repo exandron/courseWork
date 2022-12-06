@@ -5,18 +5,17 @@
 
 using namespace std;
 
-class Test : public AcademicUnit {
-private:
-    bool isPassed;
+class Test : public AcademicUnit<bool> {
+
 public:
     Test();
     Test(string name, bool isPassed, MyDate date);
     ~Test();
     void setName(string name);
-    void setIsPassed(bool isPassed);
+    void setGrade(bool isPassed);
     void setDate(MyDate date);
     string getName();
-    bool getIsPassed();
+    bool getGrade();
     MyDate getDate();
     bool isHappened();
 };

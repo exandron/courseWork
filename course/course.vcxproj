@@ -28,7 +28,6 @@
     <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AcademicUnit.cpp" />
     <ClCompile Include="Exam.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyDate.cpp" />

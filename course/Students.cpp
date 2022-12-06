@@ -228,7 +228,7 @@ Student Students::inputStudentInformation() {
                 cin >> input1;
             }
             if (input1 != -1) {
-                test.setIsPassed(input1);
+                test.setGrade(input1);
                 while (!isDate(input)) {
                     cout << "   ¬ведите дату зачета в формате день/мес€ц/год: ";
                     cin >> input;
@@ -678,7 +678,7 @@ void Students::printStudents(vector<Student> students, int size) {
                     tmp += "";
                 }
                 else {
-                    if (students[i].getTests()[j].getIsPassed()) {
+                    if (students[i].getTests()[j].getGrade()) {
                         line += "зач";
                     }
                     else {

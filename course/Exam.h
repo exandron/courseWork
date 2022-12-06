@@ -5,8 +5,7 @@
 
 using namespace std;
 
-class Exam: public AcademicUnit {
-    int grade;
+class Exam: public AcademicUnit<int> {
 public:
     Exam();
     Exam(string name, int grade, MyDate date);
