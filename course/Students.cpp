@@ -178,16 +178,16 @@ Student Students::inputStudentInformation() {
     string input;
     int input1;
     cout << "¬ведите фамилию: " << endl;
-    getchar();
-    getline(cin, input, '\n');
+    cin >> input;
+    getline(cin, input);
     newStudent.setSurname(input);
     cout << "¬ведите им€: " << endl;
-    getchar();
-    getline(cin, input, '\n');
+    cin >> input;
+    getline(cin, input);
     newStudent.setName(input);
     cout << "¬ведите отчество: " << endl;
-    getchar();
-    getline(cin, input, '\n');
+    cin >> input;
+    getline(cin, input);
     newStudent.setFathername(input);
     cout << "¬ведите номер группы: " << endl;
     cin >> input1;
@@ -212,14 +212,11 @@ Student Students::inputStudentInformation() {
         cin >> input1;
     }
     newStudent.setFormOfEducation(input1 != 0);
-    vector<Test> tests;
-    vector<Exam> exams;
     for (int i = 0; i < 9; i++) {
         if (i < 5) {
-            Test test;
             cout << "«ачет " << i + 1 << ":\n   ¬ведите код предмета: ";
             cin >> input;
-            test.setName(input);
+            newStudent.getTests()[i].setName(input);
             cout << "   ¬ведите 1 - зачет, 0 - незачет, -1 - не сдан: ";
             cin >> input1;
             while (isSymbolic(input1) == true || input1 > 1 || input1 < -1) {
@@ -228,7 +225,7 @@ Student Students::inputStudentInformation() {
                 cin >> input1;
             }
             if (input1 != -1) {
-                test.setGrade(input1);
+                newStudent.getTests()[i].setGrade(input1);
                 while (!isDate(input)) {
                     cout << "   ¬ведите дату зачета в формате день/мес€ц/год: ";
                     cin >> input;
@@ -252,24 +249,22 @@ Student Students::inputStudentInformation() {
                     }
                     input.erase(0, pos + delimiter.length());
                 }
-                test.setDate(newDate);
+                newStudent.getTests()[i].setDate(newDate);
             }
-            tests.push_back(test);
         }
         else {
-            Exam exam;
             cout << "Ёкзамен " << i - 4 << ":\n   ¬ведите код предмета: ";
             cin >> input;
-            exam.setName(input);
-            cout << "   ¬ведите оценку или -1, если экзамена еще не было: ";
+            newStudent.getExams()[i - 5].setName(input);
+            cout << "   ¬ведите оценку или -1, если экзамен не сдан: ";
             cin >> input1;
             while (isSymbolic(input1) == true || input1 > 10 || input1 < -1) {
                 cout << "Ќекорректный ввод! ѕовторите попытку." << endl;
-                cout << "   ¬ведите оценку или -1, если экзамена еще не было: " << endl;
+                cout << "   ¬ведите оценку или -1, если экзамен не сдан: " << endl;
                 cin >> input1;
             }
             if (input1 != -1) {
-                exam.setGrade(input1);
+                newStudent.getExams()[i - 5].setGrade(input1);
                 cout << "   ¬ведите дату экзамена в формате день/мес€ц/год: ";
                 cin >> input;
                 size_t pos = 0;
@@ -291,13 +286,10 @@ Student Students::inputStudentInformation() {
                     }
                     input.erase(0, pos + delimiter.length());
                 }
-                exam.setDate(newDate);
+                newStudent.getExams()[i - 5].setDate(newDate);
             }
-            exams.push_back(exam);
         }
     }
-    newStudent.setExams(exams);
-    newStudent.setTests(tests);
     return newStudent;
 }
 

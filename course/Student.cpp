@@ -1,21 +1,37 @@
 #include "Student.h"
 
-Student::Student(int group, string name, string surname, string fathername, bool formOfEducation, bool socialLife, vector<Exam> exams, vector<Test> tests) {
+Student::Student(int group, string name, string surname, string fathername, bool formOfEducation, bool socialLife, Exam* exams, Test* tests) {
     this->group = group;
     this->name = name;
     this->surname = surname;
     this->fathername = fathername;
     this->formOfEducation = formOfEducation;
     this->socialLife = socialLife;
+    this-> tests = new Test[5];
+    this->exams = new Exam[4];
     for (int i = 0; i < 5; i++) {
-        this->tests.push_back(tests[i]);
+        this->tests[i] = tests[i];
         if (i != 4) {
-            this->exams.push_back(exams[i]);
+            this->exams[i] = exams[i];
         }
     }
 }
 
-Student::Student() {}
+Student::Student() {
+    tests = new Test[5];
+    exams = new Exam[4];
+    for (int i = 0; i < 5; i++) {
+        this->tests[i] = Test("", false, MyDate(1, 1, 1));
+        if (i != 4) {
+            this->exams[i] = Exam("", 0, MyDate(1, 1, 1));
+        }
+    }
+}
+
+Student::~Student() {
+    delete[] tests;
+    delete[] exams;
+}
 
 void Student::setGroup(int group) {
     this->group = group;
@@ -41,17 +57,15 @@ void Student::setSocialLife(bool socialLife) {
     this->socialLife = socialLife;
 }
 
-void Student::setTests(vector<Test> tests) {
-    this->tests.clear();
+void Student::setTests(Test* tests) {
     for (int i = 0; i < 5; i++) {
-        this->tests.push_back(tests[i]);
+        this->tests[i] = tests[i];
     }
 }
 
-void Student::setExams(vector<Exam> exams) {
-    this->exams.clear();
+void Student::setExams(Exam* exams) {
     for (int i = 0; i < 4; i++) {
-        this->exams.push_back(exams[i]);
+        this->exams[i] = exams[i];
     }
 }
 
@@ -79,11 +93,11 @@ bool Student::getSocialLife() {
     return socialLife;
 }
 
-vector<Test> Student::getTests() {
+Test* Student::getTests() {
     return tests;
 }
 
-vector<Exam> Student::getExams() {
+Exam* Student::getExams() {
     return exams;
 }
 
@@ -94,10 +108,56 @@ Student::Student(const Student& student) {
     this->fathername = student.fathername;
     this->formOfEducation = student.formOfEducation;
     this->socialLife = student.socialLife;
+    this->tests = new Test[5];
+    this->exams = new Exam[4];
     for (int i = 0; i < 5; i++) {
-        this->tests.push_back(student.tests[i]);
+        this->tests[i] = student.tests[i];
         if (i != 4) {
-            this->exams.push_back(student.exams[i]);
+            this->exams[i] = student.exams[i];
+        }
+    }
+}
+
+double Student::getScholarship(double scholarship) {
+    if (formOfEducation == 0) {
+        return 0;
+    }
+    else {
+        for (int i = 0; i < 5; i++) {
+            if (tests[i].isHappened() && !tests[i].getGrade()) {
+                return 0;
+            }
+            if (!tests[i].isHappened()) {
+                return  -1;
+            }
+        }
+        for (int i = 0; i < 4; i++) {
+            if (exams[i].getGrade() < 4 && exams[i].isHappened()) {
+                return 0;
+            }
+            if (!exams[i].isHappened()) {
+                return -1;
+            }
+        }
+        bool excellent = true;
+        double middleGrade = 0;
+        for (int i = 0; i < 4; i++) {
+            middleGrade += exams[i].getGrade();
+            if (exams[i].getGrade() < 9) {
+                excellent = false;
+            }
+        }
+        if (excellent && socialLife == 1) {
+            return scholarship * 1.5;
+        }
+        else if (excellent && socialLife == 0) {
+            return scholarship * 1.25;
+        }
+        else if (middleGrade / 4 > 5) {
+            return scholarship;
+        }
+        else {
+            return 0;
         }
     }
 }
@@ -125,7 +185,7 @@ istream& operator>>(istream& in, Student& student) {
         getline(in, line);
         size_t pos = 0;
         string delimiter = ";";
-        vector<string> tokens;
+        string tokens[27];
         for (int i = 0; (pos = line.find(delimiter)) != string::npos; i++) {
             string token = line.substr(0, pos);
             switch (i) {
@@ -148,17 +208,16 @@ istream& operator>>(istream& in, Student& student) {
                 student.setSocialLife(stoi(token) != 0);
                 break;
             default:
-                tokens.push_back(token);
+                tokens[i - 6] = token;
             }
             line.erase(0, pos + delimiter.length());
         }
-        vector<Test> test;
-        vector<Exam> exam;
+        Test* test = new Test[5];
+        Exam* exam = new Exam[4];
         for (int i = 0; i < 27; i += 3) {
             if (i < 15) {
-                Test tmpTest;
-                tmpTest.setName(tokens[i]);
-                tmpTest.setGrade(stoi(tokens[i + 1]));
+                test[i / 3].setName(tokens[i]);
+                test[i / 3].setGrade(stoi(tokens[i + 1]));
                 pos = 0;
                 delimiter = "/";
                 MyDate newDate;
@@ -178,13 +237,11 @@ istream& operator>>(istream& in, Student& student) {
                     }
                     tokens[i + 2].erase(0, pos + delimiter.length());
                 }
-                tmpTest.setDate(newDate);
-                test.push_back(tmpTest);
+                test[i / 3].setDate(newDate);
             }
             else {
-                Exam tmpExam;
-                tmpExam.setName(tokens[i]);
-                tmpExam.setGrade(stoi(tokens[i + 1]));
+                exam[(i - 15) / 3].setName(tokens[i]);
+                exam[(i - 15) / 3].setGrade(stoi(tokens[i + 1]));
                 pos = 0;
                 delimiter = "/";
                 MyDate newDate;
@@ -204,8 +261,7 @@ istream& operator>>(istream& in, Student& student) {
                     }
                     tokens[i + 2].erase(0, pos + delimiter.length());
                 }
-                tmpExam.setDate(newDate);
-                exam.push_back(tmpExam);
+                exam[(i - 15) / 3].setDate(newDate);
             }
         }
         student.setTests(test);
